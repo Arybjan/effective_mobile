@@ -2,7 +2,8 @@
 .idea
 venv
 config/__pycache__
-apps/__pycache__
-apps/accounts/__pycache__
-apps/access/__pycache__
-apps/mock_resources/__pycache__
+app/__pycache__
+effective_mobile/apps/__pycache__
+effective_mobile/apps/accounts/__pycache__
+effective_mobile/apps/access/__pycache__
+effective_mobile/apps/mock_resources/__pycache__
