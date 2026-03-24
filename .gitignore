@@ -3,3 +3,6 @@
 venv
 config/__pycache__
 apps/__pycache__
+apps/accounts/__pycache__
+apps/access/__pycache__
+apps/mock_resources/__pycache__
