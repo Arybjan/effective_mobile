@@ -1,5 +1,8 @@
+#local
 .env
 .idea
+
+# Python
 venv
 config/__pycache__
 app/__pycache__
@@ -7,3 +10,18 @@ effective_mobile/apps/__pycache__
 effective_mobile/apps/accounts/__pycache__
 effective_mobile/apps/access/__pycache__
 effective_mobile/apps/mock_resources/__pycache__
+__pycache__/
+*.pyc
+
+# Env
+.env
+
+# Django
+db.sqlite3
+
+# VSCode / IDE
+.vscode/
+
+
+# OS
+.DS_Store
