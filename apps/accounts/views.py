@@ -114,5 +114,18 @@ class LogoutView(APIView):
             },
             status=status.HTTP_200_OK,
         )
-    
 
+
+class SoftDeleteUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @transaction.atomic
+    def delete(self, request):
+        user = request.user
+        user.is_active = False
+        user.deleted_at = datetime.now(timezone.utc)
+        user.save(update_fields=["is_active", "deleted_at", "updated_at"])
+
+        UserSession.objects.filter(user=user, is_active=True).update(is_active=False)
+
+        return Response({"message": "Аккаунт деактивирован"}, status=status.HTTP_200_OK)
