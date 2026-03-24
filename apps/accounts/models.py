@@ -1,4 +1,5 @@
 from django.db import models
+from apps.access.models import Role
 
 
 class User(models.Model):
