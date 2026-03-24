@@ -3,7 +3,12 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from django.db import transaction
-from .serializers import UserProfileSerializer, RegisterSerializer, LoginSerializer
+from .serializers import (
+    UserProfileSerializer,
+    RegisterSerializer,
+    LoginSerializer,
+    UpdateProfileSerializer,
+)
 from apps.access.models import Role
 from .models import User, UserSession
 from common.utils import check_password, generate_access_token
@@ -84,7 +89,30 @@ class LoginView(APIView):
                 "message": "Успешный вход в систему",
                 "access_token": token,
                 "token_type": "Bearer",
-                
             },
-            status=status.HTTP_200_OK
+            status=status.HTTP_200_OK,
         )
+
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response(UserProfileSerializer(request.user).data)
+
+    def patch(self, request):
+        serializer = UpdateProfileSerializer(
+            isinstance=request.user, data=request.data, partial=True
+        )
+        serializer.is_valid(raise_exeption=True)
+        serializer.save()
+
+        return Response(
+            {
+                "message": "Профиль обновлен",
+                "user": UserProfileSerializer(request.user).data,
+            },
+            status=status.HTTP_200_OK,
+        )
+    
+
