@@ -19,3 +19,16 @@ class User(models.Model):
 
     def __str__(self):
         return self.email
+
+
+class UserSession(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sessions")
+    token = models.TextField()
+
+    is_active = models.BooleanField(default=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+
+    def __str__(self):
+        return f"{self.user.email} session"
