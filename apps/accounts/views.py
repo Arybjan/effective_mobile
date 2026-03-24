@@ -3,9 +3,12 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from django.db import transaction
-from .serializers import UserProfileSerializer, RegisterSerializer
+from .serializers import UserProfileSerializer, RegisterSerializer, LoginSerializer
 from apps.access.models import Role
 from .models import User, UserSession
+from common.utils import check_password, generate_access_token
+
+from datetime import datetime, timedelta, timezone
 
 
 class RegisterView(APIView):
@@ -34,4 +37,54 @@ class RegisterView(APIView):
             },
             status=status.HTTP_201_CREATED,
         )
-    
+
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+
+    @transaction.atomic
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        email = serializer.validated_data["email"]
+        password = serializer.validated_data["password"]
+
+        try:
+            user = User.objects.get(email=email)
+
+        except User.DoesNotExist:
+            return Response(
+                {"detail": "Неверный email или пароль"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        if not user.is_active:
+            return Response(
+                {"detail": "Аккаунт деактивирован."},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        if not check_password(password, user.password_hash):
+            return Response(
+                {"detail": "Неверный email или пароль"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        token = generate_access_token(user.id, expires_minute=60)
+
+        UserSession.objects.create(
+            user=user,
+            token=token,
+            is_active=True,
+            expires_at=datetime.now(timezone.utc) + timedelta(minutes=60),
+        )
+        return Response(
+            {
+                "message": "Успешный вход в систему",
+                "access_token": token,
+                "token_type": "Bearer",
+                
+            },
+            status=status.HTTP_200_OK
+        )
