@@ -97,6 +97,25 @@ class LoginView(APIView):
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @transaction.atomic
+    def post(self, request):
+        token = request.auth
+
+        UserSession.objects.filter(
+            user=request.user,
+            token=token,
+            is_activate=True,
+        ).update(is_active=False)
+
+        return Response(
+            {"message": "Вы успешно вышли из системы."},
+            status=status.HTTP_200_OK,
+        )
+
+
+class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         return Response(UserProfileSerializer(request.user).data)
 
