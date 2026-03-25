@@ -10,7 +10,7 @@ from .serializers import (
     UpdateProfileSerializer,
 )
 from apps.access.models import Role
-from .models import User, UserSession
+from apps.accounts.models import User, UserSession
 from common.utils import check_password, generate_access_token
 
 from datetime import datetime, timedelta, timezone
