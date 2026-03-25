@@ -28,7 +28,7 @@ class BusinessElementListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated, IsAdminRole]
 
 
-class AccessRuleDeteilView(generics.RetrieveUpdateAPIView):
+class AccessRuleDetailView(generics.RetrieveUpdateAPIView):
     queryset = AccessRoleRule.objects.select_related("role", "elemen").all()
     serializer_class = AccessRoleRuleSerializer
     permission_classes = [IsAuthenticated, IsAdminRole]
