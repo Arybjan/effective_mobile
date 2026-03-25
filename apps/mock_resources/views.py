@@ -154,3 +154,29 @@ class OrdersView(APIView):
             {"message": f"Order {order_id} удален"},
             status=status.HTTP_200_OK,
         )
+
+
+class UserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        role = get_role_rule(user, "users")
+
+        if not role:
+            return Response(
+                {"detail": "Нет доступа к ресурсу users"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if role.read_all_permission:
+            return Response(MOCK_USERS, status=status.HTTP_200_OK)
+
+        if role.read_permission:
+            own_user_data = [item for item in MOCK_USERS if item["id"] == user.id]
+            return Response(own_user_data, status=status.HTTP_200_OK)
+
+        return Response(
+            {"detail": "У вас нет доступа к просмотру users."},
+            status=status.HTTP_403_FORBIDDEN,
+        )

@@ -6,5 +6,5 @@ urlpatterns = [
     # Auth / Users
     path("api/accounts/", include("apps.accounts.urls")),
     # Role / Access rules
-    path("api/access", include("apps.access.urls")),
+    path("api/access/", include("apps.access.urls")),
 ]
