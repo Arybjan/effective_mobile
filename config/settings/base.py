@@ -2,12 +2,11 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 load_dotenv(BASE_DIR / ".env")
 
-SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")
+SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG")
-
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS")
 
 INSTALLED_APPS = [
@@ -17,9 +16,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     "rest_framework",
-
     "apps.accounts",
     "apps.access",
     "apps.mock_resources",
@@ -61,8 +58,8 @@ DATABASES = {
         "NAME": os.getenv("POSTGRES_DB"),
         "USER": os.getenv("POSTGRES_USER"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-        "HOST": os.getenv("POSTGRES_HOST"),
-        "PORT": os.getenv("POSTGRES_PORT"),
+        "HOST": os.getenv("POSTGRES_HOST", "localhost"),
+        "PORT": os.getenv("POSTGRES_PORT", "5432"),
     }
 }
 
@@ -84,3 +81,7 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ],
 }
+
+print("BASE_DIR =", BASE_DIR)
+print("ENV PATH =", BASE_DIR / ".env")
+print("ENV EXISTS =", (BASE_DIR / ".env").exists())

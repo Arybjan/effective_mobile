@@ -20,7 +20,9 @@ class BusinessElement(models.Model):
 
 class AccessRoleRule(models.Model):
     role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name="rules")
-    element = models.ForeignKey(BusinessElement, on_delete=models.CASCADE, related_name="rules")
+    element = models.ForeignKey(
+        BusinessElement, on_delete=models.CASCADE, related_name="rules"
+    )
 
     read_permission = models.BooleanField(default=False)
     read_all_permission = models.BooleanField(default=False)
@@ -32,6 +34,9 @@ class AccessRoleRule(models.Model):
 
     delete_permission = models.BooleanField(default=False)
     delete_all_permission = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ("role", "element")
 
     def __str__(self):
         return f"{self.role.name} -> {self.element.code}"

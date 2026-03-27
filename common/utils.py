@@ -8,7 +8,7 @@ import jwt
 def hash_password(raw_password: str) -> str:
     password_bytes = raw_password.encode("utf-8")
     salt = bcrypt.gensalt()
-    hashed = bcrypt.hashpw(salt, password_bytes)
+    hashed = bcrypt.hashpw(password_bytes, salt)
     return hashed.decode("utf-8")
 
 
@@ -24,8 +24,8 @@ def generate_access_token(user_id: int, expires_minute: int = 60) -> str:
         "iat": now,
         "exp": now + timedelta(minutes=expires_minute),
     }
-    return jwt.encode(payload, settings.SECRET_KEY, algorithm="SHA256")
+    return jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
 
 
 def decode_access_token(token: str) -> bool:
-    return jwt.decode(token, settings.SECRET_KEY, algorithms=["SHA256"])
+    return jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])

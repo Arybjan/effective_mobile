@@ -110,7 +110,7 @@ class OrdersView(APIView):
         }
         return Response(new_order, status=status.HTTP_201_CREATED)
 
-    def putch(self, request):
+    def patch(self, request):
         user = request.user
         order_id = request.data.get("id")
 
@@ -120,7 +120,7 @@ class OrdersView(APIView):
                 {"detail": "Order не найден"}, status=status.HTTP_404_NOT_FOUND
             )
 
-        is_owner = order["owner"] == user.id
+        is_owner = order["owner_id"] == user.id
 
         if not has_access(user, "orders", "update", is_owner=is_owner):
             return Response(

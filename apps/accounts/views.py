@@ -11,7 +11,7 @@ from .serializers import (
 )
 from apps.access.models import Role
 from apps.accounts.models import User, UserSession
-from common.utils import check_password, generate_access_token
+from common.utils import check_password, generate_access_token, hash_password
 
 from datetime import datetime, timedelta, timezone
 
@@ -27,18 +27,18 @@ class RegisterView(APIView):
         default_role = Role.objects.get(name="user")
 
         user = User.objects.create(
-            first_name=serializer.validated_data(["first_name"]),
-            last_name=serializer.validated_data(["last_name"]),
-            middle_name=serializer.validated_data(["middle_name", ""]),
-            email=serializer.validated_data(["email"]),
-            password_hash=serializer.validated_data(["password"]),
+            first_name=serializer.validated_data["first_name"],
+            last_name=serializer.validated_data["last_name"],
+            middle_name=serializer.validated_data.get("middle_name", ""),
+            email=serializer.validated_data["email"],
+            password_hash=hash_password(serializer.validated_data["password"]),
             role=default_role,
         )
 
         return Response(
             {
                 "message": "Пользователь успешно зарегистрирован.",
-                "user": UserProfileSerializer(user).data,
+                "user": UserProfileSerializer(instance=user).data,
             },
             status=status.HTTP_201_CREATED,
         )

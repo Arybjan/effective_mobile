@@ -34,18 +34,19 @@ def can_delete(rule, is_owner: bool = False) -> bool:
         return False
     return rule.delete_all_permission or (rule.delete_permission and is_owner)
 
+
 def has_access(user, element_code: str, action: str, is_owner: bool = False) -> bool:
     rule = get_role_rule(user, element_code)
 
     if action == "read":
         return can_read(rule, is_owner=is_owner)
-    
+
     if action == "update":
         return can_update(rule, is_owner=is_owner)
-    
+
     if action == "create":
         return can_create(rule)
-    
+
     if action == "delete":
         return can_delete(rule, is_owner=is_owner)
 

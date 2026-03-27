@@ -8,5 +8,5 @@ urlpatterns = [
     # Role / Access rules
     path("api/access/", include("apps.access.urls")),
     # Mock business endpoints
-    path("api/mock/", include("apps.mock_pesources.urls")),
+    path("api/mock/", include("apps.mock_resources.urls")),
 ]

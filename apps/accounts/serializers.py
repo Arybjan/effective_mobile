@@ -3,7 +3,7 @@ from .models import User
 
 
 class RegisterSerializer(serializers.Serializer):
-    fist_name = serializers.CharField(max_length=100)
+    first_name = serializers.CharField(max_length=100)
     last_name = serializers.CharField(max_length=100)
     middle_name = serializers.CharField(
         max_length=100, required=False, allow_blank=True
@@ -25,11 +25,11 @@ class RegisterSerializer(serializers.Serializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    emal = serializers.EmailField()
+    email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
 
 
-class UserProfileSerializer(serializers.ModelField):
+class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
@@ -45,7 +45,7 @@ class UserProfileSerializer(serializers.ModelField):
         read_only_fields = ("id", "is_active", "created_at", "updated_at")
 
 
-class UpdateProfileSerializer(serializers.ModelField):
+class UpdateProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("first_name", "last_name", "middle_name", "email")

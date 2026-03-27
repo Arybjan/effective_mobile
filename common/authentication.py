@@ -13,13 +13,13 @@ class JWTAuthentication(BaseAuthentication):
 
         parts = auth_header.split()
 
-        if len(parts) != 2 or parts[0].lower() != "Bearer":
+        if len(parts) != 2 or parts[0].lower() != "bearer":
             raise AuthenticationFailed("Некорректный формат Authorization header")
 
         token = parts[1]
 
         try:
-            payload = decode_access_token(token=token)
+            payload = decode_access_token(token)
         except Exception:
             raise AuthenticationFailed("Токен недействителен или просрочен")
 
