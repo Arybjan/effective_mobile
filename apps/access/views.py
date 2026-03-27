@@ -16,7 +16,7 @@ class RoleListView(generics.ListAPIView):
     permission_classes = [IsAdminRole, IsAuthenticated]
 
 
-class AccessRoleRuleListCreatView(generics.CreateAPIView):
+class AccessRoleRuleListCreatView(generics.ListCreateAPIView):
     queryset = AccessRoleRule.objects.select_related("role", "element").all()
     serializer_class = AccessRoleRuleSerializer
     permission_classes = [IsAuthenticated, IsAdminRole]

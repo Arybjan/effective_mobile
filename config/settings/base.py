@@ -81,7 +81,3 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ],
 }
-
-print("BASE_DIR =", BASE_DIR)
-print("ENV PATH =", BASE_DIR / ".env")
-print("ENV EXISTS =", (BASE_DIR / ".env").exists())
